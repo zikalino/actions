@@ -41,6 +41,7 @@ jobs:
         exclude:
           - component: ${{ inputs.newlib && 'none' || 'newlib' }}
           - component: ${{ inputs.console && 'none' || 'console' }}
+          - component: 'none'
     runs-on: ubuntu-latest
     container:
       image: zimkal/esp-qemu
