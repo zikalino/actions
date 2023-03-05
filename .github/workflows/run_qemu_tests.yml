@@ -35,30 +35,30 @@ jobs:
           pip install pyecharts
           pip install idf_build_apps
           pip install PyYaml
-          export IDF_PATH=/__w/esp-idf/esp-idf
-          cd /__w/esp-idf/esp-idf
+          export IDF_PATH=/__w/actions/actions/esp-idf
+          cd /__w/actions/actions/esp-idf
           ./install.sh all
       - name: Build
         run: |
-          export IDF_PATH=/__w/esp-idf/esp-idf
+          export IDF_PATH=/__w/actions/actions/esp-idf
           . ./export.sh
           python3 ./tools/idf_tools.py install-python-env --features pytest,ci
-          python3 /__w/esp-idf/esp-idf/tools/ci/ci_build_apps.py . --target esp32 -m qemu -vv --pytest-apps
+          python3 /__w/actions/actions/esp-idf/tools/ci/ci_build_apps.py . --target esp32 -m qemu -vv --pytest-apps
 
       - name: Run pthread tests
         run: |
-          export IDF_PATH=/__w/esp-idf/esp-idf
+          export IDF_PATH=/__w/actions/actions/esp-idf
           . ./export.sh
           pytest components/pthread/ --target esp32 -m qemu --embedded-services idf,qemu --build-dir=build_esp32_default
 
       - name: Run efuse tests
         run: |
-          export IDF_PATH=/__w/esp-idf/esp-idf
+          export IDF_PATH=/__w/actions/actions/esp-idf
           . ./export.sh
           pytest components/efuse/ --target esp32 -m qemu --embedded-services idf,qemu --build-dir=build_esp32_default
 
       - name: Run hello-world test
         run: |
-          export IDF_PATH=/__w/esp-idf/esp-idf
+          export IDF_PATH=/__w/actions/actions/esp-idf
           . ./export.sh
           pytest examples/get-started/hello_world/ --target esp32 -m qemu --embedded-services idf,qemu --build-dir=build_esp32_default
