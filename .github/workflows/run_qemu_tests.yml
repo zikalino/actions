@@ -1,0 +1,63 @@
+name: Run QEMU Tests
+
+on:
+  workflow_dispatch:
+    inputs:
+      repo:
+        type: choice
+        description: Repository
+        options:
+        - espressif/esp-idf
+        - zikalino/esp-idf
+      branch:
+        description: Branch
+        type: string
+        default: master
+
+jobs:
+  container:
+    runs-on: ubuntu-latest
+    container:
+      image: zimkal/esp-qemu
+      options: --user root
+    steps:
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+          repository: ${{ inputs.repo }}
+          ref: ${{ inputs.branch }}
+      - name: Install Tools
+        run: |
+          apt-get update && apt-get install -y python3.10-venv && apt-get install -y openocd
+          pip install pyecharts
+          pip install idf_build_apps
+          pip install PyYaml
+          export IDF_PATH=/__w/esp-idf/esp-idf
+          cd /__w/esp-idf/esp-idf
+          ./install.sh all
+      - name: Build
+        run: |
+          export IDF_PATH=/__w/esp-idf/esp-idf
+          . ./export.sh
+          python3 ./tools/idf_tools.py install-python-env --features pytest,ci
+          python3 /__w/esp-idf/esp-idf/tools/ci/ci_build_apps.py . --target esp32 -m qemu -vv --pytest-apps
+
+      - name: Run pthread tests
+        run: |
+          export IDF_PATH=/__w/esp-idf/esp-idf
+          . ./export.sh
+          pytest components/pthread/ --target esp32 -m qemu --embedded-services idf,qemu --build-dir=build_esp32_default
+
+      - name: Run efuse tests
+        run: |
+          export IDF_PATH=/__w/esp-idf/esp-idf
+          . ./export.sh
+          pytest components/efuse/ --target esp32 -m qemu --embedded-services idf,qemu --build-dir=build_esp32_default
+
+      - name: Run hello-world test
+        run: |
+          export IDF_PATH=/__w/esp-idf/esp-idf
+          . ./export.sh
+          pytest examples/get-started/hello_world/ --target esp32 -m qemu --embedded-services idf,qemu --build-dir=build_esp32_default
