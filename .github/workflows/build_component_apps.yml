@@ -26,35 +26,10 @@ on:
         description: Component - console
         type: boolean
         default: false
-      esp32:
-        description: ESP32
-        type: boolean
-        default: false
-      esp32c2:
-        description: ESP32C2
-        type: boolean
-        default: false
-      esp32c3:
-        description: ESP32C3
-        type: boolean
-        default: false
-      esp32c6:
-        description: ESP32C6
-        type: boolean
-        default: false
-      esp32s2:
-        description: ESP32S2
-        type: boolean
-        default: false
-      esp32s3:
-        description: ESP32S3
-        type: boolean
-        default: false
-      esp32h2:
-        description: ESP32H2
-        type: boolean
-        default: false
-
+      targets:
+        description: Targets
+        type: string
+        default: "['esp32', 'esp32c2', 'esp32c3', 'esp32c6', 'esp32s2', 'esp32s3', 'esp32h2']"
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -62,17 +37,10 @@ jobs:
     strategy:
       matrix:
         component: [none, newlib, console]
-        target: [esp32, esp32c2, esp32c3, esp32c6, esp32s2, esp32s3, esp32h2]
+        target: ${{ fromJSON( inputs.targets )}}
         exclude:
           - component: ${{ inputs.newlib && 'none' || 'newlib' }}
           - component: ${{ inputs.console && 'none' || 'console' }}
-          - target: ${{ inputs.esp32 && 'none' || 'esp32' }}
-          - target: ${{ inputs.esp32c2 && 'none' || 'esp32c2' }}
-          - target: ${{ inputs.esp32c3 && 'none' || 'esp32c3' }}
-          - target: ${{ inputs.esp32c6 && 'none' || 'esp32c6' }}
-          - target: ${{ inputs.esp32s2 && 'none' || 'esp32s2' }}
-          - target: ${{ inputs.esp32s3 && 'none' || 'esp32s3' }}
-          - target: ${{ inputs.esp32h2 && 'none' || 'esp32h2' }}
     runs-on: ubuntu-latest
     container:
       image: zimkal/esp-qemu
