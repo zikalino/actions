@@ -1,0 +1,102 @@
+# This is a basic workflow that is manually triggered
+
+name: Build Component Apps
+
+# Controls when the action will run. Workflow runs when manually triggered using the UI
+# or API.
+on:
+  workflow_dispatch:
+    # Inputs the workflow accepts.
+    inputs:
+      repo:
+        type: choice
+        description: Repository
+        options:
+        - espressif/esp-idf
+        - zikalino/esp-idf
+      branch:
+        description: Branch
+        type: string
+        default: master
+      newlib:
+        description: Component - newlib
+        type: boolean
+        default: false
+      console:
+        description: Component - console
+        type: boolean
+        default: false
+      esp32:
+        description: ESP32
+        type: boolean
+        default: false
+      esp32c2:
+        description: ESP32C2
+        type: boolean
+        default: false
+      esp32c3:
+        description: ESP32C3
+        type: boolean
+        default: false
+      esp32c6:
+        description: ESP32C6
+        type: boolean
+        default: false
+      esp32s2:
+        description: ESP32S2
+        type: boolean
+        default: false
+      esp32s3:
+        description: ESP32S3
+        type: boolean
+        default: false
+      esp32h2:
+        description: ESP32H2
+        type: boolean
+        default: false
+
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  container:
+    strategy:
+      matrix:
+        component: [none, newlib, console]
+        target: [esp32, esp32c2, esp32c3, esp32c6, esp32s2, esp32s3, esp32h2]
+        exclude:
+          - component: ${{ inputs.newlib && 'none' || 'newlib' }}
+          - component: ${{ inputs.console && 'none' || 'console' }}
+          - target: ${{ inputs.esp32 && 'none' || 'esp32' }}
+          - target: ${{ inputs.esp32c2 && 'none' || 'esp32c2' }}
+          - target: ${{ inputs.esp32c3 && 'none' || 'esp32c3' }}
+          - target: ${{ inputs.esp32c6 && 'none' || 'esp32c6' }}
+          - target: ${{ inputs.esp32s2 && 'none' || 'esp32s2' }}
+          - target: ${{ inputs.esp32s3 && 'none' || 'esp32s3' }}
+          - target: ${{ inputs.esp32h2 && 'none' || 'esp32h2' }}
+    runs-on: ubuntu-latest
+    container:
+      image: zimkal/esp-qemu
+      options: --user root
+    steps:
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+          repository: ${{ inputs.repo }}
+          ref: ${{ inputs.branch }}
+      - name: Install Tools
+        run: |
+          apt-get update && apt-get install -y python3.10-venv && apt-get install -y openocd
+          pip install pyecharts
+          pip install idf_build_apps
+          pip install PyYaml
+          export IDF_PATH=/__w/esp-idf/esp-idf
+          cd /__w/esp-idf/esp-idf
+          ./install.sh all
+      - name: Build component/${{ matrix.component }} (esp32)
+        run: |
+          export IDF_PATH=/__w/esp-idf/esp-idf
+          . ./export.sh
+          python3 ./tools/idf_tools.py install-python-env --features pytest,ci
+          python3 /__w/esp-idf/esp-idf/tools/ci/ci_build_apps.py -v -t ${{ matrix.target }} --pytest-apps --collect-size-info size_info.txt components/${{ matrix.component }}
