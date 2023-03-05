@@ -28,6 +28,7 @@ jobs:
           submodules: recursive
           repository: ${{ inputs.repo }}
           ref: ${{ inputs.branch }}
+          path: esp-idf
       - name: Install Tools
         run: |
           apt-get update && apt-get install -y python3.10-venv && apt-get install -y openocd
