@@ -38,6 +38,7 @@ jobs:
           export IDF_PATH=/__w/actions/actions/esp-idf
           cd /__w/actions/actions/esp-idf
           ./install.sh all
+          echo "### Hello world! :rocket:" >> $GITHUB_STEP_SUMMARY
       - name: Build
         run: |
           export IDF_PATH=/__w/actions/actions/esp-idf
