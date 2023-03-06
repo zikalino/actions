@@ -26,6 +26,10 @@ on:
         description: Component - console
         type: boolean
         default: false
+      efuse:
+        description: Component - efuse
+        type: boolean
+        default: false
       targets:
         description: Targets
         type: string
@@ -36,11 +40,12 @@ jobs:
   container:
     strategy:
       matrix:
-        component: [none, newlib, console]
+        component: [none, newlib, console, efuse]
         target: ${{ fromJSON( inputs.targets )}}
         exclude:
           - component: ${{ inputs.newlib && 'none' || 'newlib' }}
           - component: ${{ inputs.console && 'none' || 'console' }}
+          - component: ${{ inputs.efuse && 'none' || 'efuse' }}
           - component: 'none'
     runs-on: ubuntu-latest
     container:
