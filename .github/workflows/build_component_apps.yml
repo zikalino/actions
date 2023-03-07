@@ -30,6 +30,14 @@ on:
         description: Component - efuse
         type: boolean
         default: false
+      freertos:
+        description: Component - freertos
+        type: boolean
+        default: false
+      esp_event:
+        description: Component - esp_event
+        type: boolean
+        default: false
       targets:
         description: Targets
         type: string
@@ -40,12 +48,14 @@ jobs:
   container:
     strategy:
       matrix:
-        component: [none, newlib, console, efuse]
+        component: [none, newlib, console, efuse, freertos, esp_event]
         target: ${{ fromJSON( inputs.targets )}}
         exclude:
           - component: ${{ inputs.newlib && 'none' || 'newlib' }}
           - component: ${{ inputs.console && 'none' || 'console' }}
           - component: ${{ inputs.efuse && 'none' || 'efuse' }}
+          - component: ${{ inputs.freertos && 'none' || 'freertos' }}
+          - component: ${{ inputs.esp_event && 'none' || 'esp_event' }}
           - component: 'none'
     runs-on: ubuntu-latest
     container:
