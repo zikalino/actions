@@ -18,30 +18,10 @@ on:
         description: Branch
         type: string
         default: master
-      newlib:
-        description: Component - newlib
-        type: boolean
-        default: false
-      console:
-        description: Component - console
-        type: boolean
-        default: false
-      efuse:
-        description: Component - efuse
-        type: boolean
-        default: false
-      freertos:
-        description: Component - freertos
-        type: boolean
-        default: false
-      esp_event:
-        description: Component - esp_event
-        type: boolean
-        default: false
-      esp_system:
-        description: Component - esp_system
-        type: boolean
-        default: false
+      components:
+        description: Components
+        type: string
+        default: "['bootloader_support', 'console', 'cxx', 'efuse', 'esp_common', 'esp_event', 'esp_ringbuf', 'esp_rom', 'esp_system', 'esp_timer', 'freertos', 'heap', 'newlib', 'pthread', 'ulp']"
       targets:
         description: Targets
         type: string
@@ -52,16 +32,17 @@ jobs:
   container:
     strategy:
       matrix:
-        component: [none, newlib, console, efuse, freertos, esp_event, esp_system]
+        # component: [none, newlib, console, efuse, freertos, esp_event, esp_system]
+        component: ${{ fromJSON( inputs.components )}}
         target: ${{ fromJSON( inputs.targets )}}
-        exclude:
-          - component: ${{ inputs.newlib && 'none' || 'newlib' }}
-          - component: ${{ inputs.console && 'none' || 'console' }}
-          - component: ${{ inputs.efuse && 'none' || 'efuse' }}
-          - component: ${{ inputs.freertos && 'none' || 'freertos' }}
-          - component: ${{ inputs.esp_event && 'none' || 'esp_event' }}
-          - component: ${{ inputs.esp_system && 'none' || 'esp_system' }}
-          - component: 'none'
+        #exclude:
+        #  - component: ${{ inputs.newlib && 'none' || 'newlib' }}
+        #  - component: ${{ inputs.console && 'none' || 'console' }}
+        #  - component: ${{ inputs.efuse && 'none' || 'efuse' }}
+        #  - component: ${{ inputs.freertos && 'none' || 'freertos' }}
+        #  - component: ${{ inputs.esp_event && 'none' || 'esp_event' }}
+        #  - component: ${{ inputs.esp_system && 'none' || 'esp_system' }}
+        #  - component: 'none'
     runs-on: ubuntu-latest
     container:
       image: zimkal/esp-qemu
@@ -84,7 +65,7 @@ jobs:
           export IDF_PATH=/__w/actions/actions/esp-idf
           cd /__w/actions/actions/esp-idf
           ./install.sh all
-      - name: Build component/${{ matrix.component }} (esp32)
+      - name: Build component/${{ matrix.component }} (${{ matrix.target }})
         run: |
           export IDF_PATH=/__w/actions/actions/esp-idf
           cd /__w/actions/actions/esp-idf
