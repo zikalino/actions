@@ -12,8 +12,8 @@ on:
         type: choice
         description: Repository
         options:
-        - espressif/esp-idf
         - zikalino/esp-idf
+        - espressif/esp-idf
       branch:
         description: Branch
         type: string
@@ -58,10 +58,10 @@ jobs:
           path: esp-idf
       - name: Install Tools
         run: |
-          apt-get update && apt-get install -y python3.10-venv && apt-get install -y openocd
-          pip install pyecharts
-          pip install idf_build_apps
-          pip install PyYaml
+          # apt-get update && apt-get install -y python3.10-venv && apt-get install -y openocd
+          # pip install pyecharts
+          # pip install idf_build_apps
+          # pip install PyYaml
           export IDF_PATH=/__w/actions/actions/esp-idf
           cd /__w/actions/actions/esp-idf
           ./install.sh all
