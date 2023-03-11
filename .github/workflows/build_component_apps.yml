@@ -71,6 +71,6 @@ jobs:
           cd /__w/actions/actions/esp-idf
           . ./export.sh
           python3 ./tools/idf_tools.py install-python-env --features pytest,ci
-          python3 /__w/actions/actions/esp-idf/tools/ci/ci_build_apps.py -v -t ${{ matrix.target }} --pytest-apps --collect-size-info size_info.txt components/${{ matrix.component }} >> out.txt
+          python3 /__w/actions/actions/esp-idf/tools/ci/ci_build_apps.py -v -t ${{ matrix.target }} --pytest-apps --collect-size-info size_info.txt components/${{ matrix.component }} > out.txt
           echo "========================================= BUILD OUTPUT"
           cat out.txt
