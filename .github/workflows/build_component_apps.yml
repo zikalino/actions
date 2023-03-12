@@ -84,4 +84,4 @@ jobs:
           # python3 /__w/actions/actions/esp-idf/tools/ci/ci_build_apps.py -v -t ${{ matrix.target }} --pytest-apps --collect-size-info size_info.txt components/${{ matrix.component }} 2>&1 | tee -a out.txt
           python3 /__w/actions/actions/esp-idf/tools/ci/ci_build_apps.py -v -t ${{ matrix.target }} --pytest-apps --collect-size-info size_info.txt components/${{ matrix.component }}
           echo "========================================= BUILD OUTPUT"
-          cat out.txt
+          # cat out.txt
