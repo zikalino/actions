@@ -64,13 +64,13 @@ jobs:
           # pip install PyYaml
           export IDF_PATH=/__w/actions/actions/esp-idf
           cd /__w/actions/actions/esp-idf
-          ./install.sh all
+          #./install.sh all
       - name: Build component/${{ matrix.component }} (${{ matrix.target }})
         run: |
           export IDF_PATH=/__w/actions/actions/esp-idf
           cd /__w/actions/actions/esp-idf
           . ./export.sh
-          python3 ./tools/idf_tools.py install-python-env --features pytest,ci
+          # python3 ./tools/idf_tools.py install-python-env --features pytest,ci
           python3 /__w/actions/actions/esp-idf/tools/ci/ci_build_apps.py -v -t ${{ matrix.target }} --pytest-apps --collect-size-info size_info.txt components/${{ matrix.component }} 2> out.txt
           echo "========================================= BUILD OUTPUT"
           cat out.txt
