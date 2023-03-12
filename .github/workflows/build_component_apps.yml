@@ -55,6 +55,9 @@ jobs:
           echo ~
           ls /root
           ls /root/.espressif
+          cp -R /root/.espressif ~
+          echo "====================== COPIED"
+          ls ~/.espressif
       - name: Checkout
         id: checkout
         uses: actions/checkout@v3
