@@ -64,7 +64,7 @@ jobs:
           # pip install PyYaml
           export IDF_PATH=/__w/actions/actions/esp-idf
           cd /__w/actions/actions/esp-idf
-          #./install.sh all
+          ./install.sh all
       - name: Build component/${{ matrix.component }} (${{ matrix.target }})
         run: |
           export IDF_PATH=/__w/actions/actions/esp-idf
