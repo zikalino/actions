@@ -45,7 +45,7 @@ jobs:
         #  - component: 'none'
     runs-on: ubuntu-latest
     container:
-      image: zimkal/esp-qemu
+      image: zimkal/esp-qemu-1
       options: --user root
     steps:
       - name: Checkout
