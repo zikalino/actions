@@ -48,6 +48,13 @@ jobs:
       image: zimkal/esp-qemu-1
       options: --user root
     steps:
+      - name: Info
+        run: |
+          echo "====================== INFORMATION"
+          whoami
+          echo ~
+          ls /root
+          ls /root/.espressif
       - name: Checkout
         id: checkout
         uses: actions/checkout@v3
