@@ -55,7 +55,6 @@ jobs:
         run: |
           echo "====================== INFORMATION"
           echo ${{ vars.INTERNAL_SERVER_URL }}
-          ls ~/.espressif
       - name: Checkout
         if: ${{ !inputs.internal }}
         id: checkout_public
