@@ -18,6 +18,9 @@ on:
         description: Branch
         type: string
         default: master
+      internal:
+        type: choice
+        description: Internal Repo
       components:
         description: Components
         type: string
@@ -59,6 +62,7 @@ jobs:
           echo "====================== COPIED"
           ls ~/.espressif
       - name: Checkout
+        if: {{!inputs.internal}}
         id: checkout
         uses: actions/checkout@v3
         with:
@@ -66,6 +70,17 @@ jobs:
           repository: ${{ inputs.repo }}
           ref: ${{ inputs.branch }}
           path: esp-idf
+      - name: Checkout
+        if: {{ inputs.internal }}
+        id: checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+          repository: ${{ inputs.repo }}
+          ref: ${{ inputs.branch }}
+          path: esp-idf
+          github-server-url: ${{ env.INTERNAL_SERVER_URL }}
+          token: ${{ secrets.gitlab_token }}
       - name: Install Tools
         run: |
           # apt-get update && apt-get install -y python3.10-venv && apt-get install -y openocd
