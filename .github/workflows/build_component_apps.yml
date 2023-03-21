@@ -19,7 +19,7 @@ on:
         type: string
         default: master
       internal:
-        type: choice
+        type: boolean
         description: Internal Repo
       components:
         description: Components
