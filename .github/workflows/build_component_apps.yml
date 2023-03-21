@@ -54,12 +54,7 @@ jobs:
       - name: Info
         run: |
           echo "====================== INFORMATION"
-          whoami
-          echo ~
-          ls /root
-          ls /root/.espressif
-          cp -R /root/.espressif ~
-          echo "====================== COPIED"
+          echo ${{ vars.INTERNAL_SERVER_URL }}
           ls ~/.espressif
       - name: Checkout
         if: ${{ !inputs.internal }}
@@ -79,7 +74,7 @@ jobs:
           repository: ${{ inputs.repo }}
           ref: ${{ inputs.branch }}
           path: esp-idf
-          github-server-url: ${{ env.INTERNAL_SERVER_URL }}
+          github-server-url: ${{ vars.INTERNAL_SERVER_URL }}
           token: ${{ secrets.gitlab_token }}
       - name: Install Tools
         run: |
