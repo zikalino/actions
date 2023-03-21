@@ -62,7 +62,7 @@ jobs:
           echo "====================== COPIED"
           ls ~/.espressif
       - name: Checkout
-        if: {{!inputs.internal}}
+        if: !inputs.internal
         id: checkout
         uses: actions/checkout@v3
         with:
@@ -71,7 +71,7 @@ jobs:
           ref: ${{ inputs.branch }}
           path: esp-idf
       - name: Checkout
-        if: {{ inputs.internal }}
+        if: inputs.internal
         id: checkout
         uses: actions/checkout@v3
         with:
